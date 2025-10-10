@@ -1,5 +1,7 @@
 package db;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -10,9 +12,12 @@ import java.sql.SQLException;
 
 public class DatabaseHelper {
 
-    public static void saveExcelDataToDatabase(Connection connection, Sheet sheet) throws SQLException {
+    private final Logger logger = LogManager.getLogger(DatabaseHelper.class);
+
+    public void saveExcelDataToDatabase(Connection connection, Sheet sheet) throws SQLException {
         String sqlCommand = "INSERT INTO exceldb.myTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
+            logger.info("*** PREPARING TO ADD DATA TO DATABASE ***");
             PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) {
@@ -26,8 +31,9 @@ public class DatabaseHelper {
                 preparedStatement.addBatch();
             }
             int[] results = preparedStatement.executeBatch();
-            System.out.println("Added: " + results + " to Database");
+            logger.info("Added: " + results.length + " to Database");
         } catch (SQLException e) {
+            logger.error("*** COULDN`T ADD VALUE TO DATABASE ***");
             throw new SQLException("Couldn`t add value", e);
         }
     }
@@ -41,68 +47,4 @@ public class DatabaseHelper {
             default ->  "";
         };
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public static void saveExcelDataToDatabase(Connection connection, Sheet sheet) throws SQLException {
-//        String sqlCommand = "INSERT INTO exceldb.myTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
-//            for (Row row : sheet) {
-//                if (row.getRowNum() == 0)
-//                    continue;
-//                for (int i = 0; i < 11; i++) {
-//                    Cell cell = row.getCell(i);
-//                    String cellValue = getCellValueAsString(cell);
-//                    preparedStatement.setString(i + 1, cellValue);
-//                }
-//                preparedStatement.addBatch(); // Dodaj do batcha dla wydajności
-//            }
-//
-//            int[] results = preparedStatement.executeBatch(); // Wykonaj wszystkie naraz
-//            System.out.println("Dodano " + results.length + " wierszy do bazy");
-//        } catch (SQLException e) {
-//            throw new SQLException("Error", e);
-//        }
-//    }
-//
-//    private static String getCellValueAsString(Cell cell) {
-//        switch (cell.getCellType()) {
-//            case STRING:
-//                return cell.getStringCellValue();
-//            case NUMERIC:
-//                return String.valueOf(cell.getNumericCellValue());
-//            case BOOLEAN:
-//                return String.valueOf(cell.getBooleanCellValue());
-//            case FORMULA:
-//                return cell.getCellFormula();
-//            default:
-//                return "";
-//        }
-//    }
 }
