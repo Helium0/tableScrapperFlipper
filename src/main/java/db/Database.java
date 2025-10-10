@@ -1,3 +1,5 @@
+package db;
+
 import utils.Config;
 
 import java.sql.Connection;
