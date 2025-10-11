@@ -13,9 +13,10 @@ import java.sql.SQLException;
 public class DatabaseHelper {
 
     private final Logger logger = LogManager.getLogger(DatabaseHelper.class);
+    private final String DB_TABLE = "exceldb.myTable";
 
     public void saveExcelDataToDatabase(Connection connection, Sheet sheet) throws SQLException {
-        String sqlCommand = "INSERT INTO exceldb.myTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlCommand = String.format("INSERT INTO %s VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", DB_TABLE);
         try {
             logger.info("*** PREPARING TO ADD DATA TO DATABASE ***");
             PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
@@ -31,7 +32,7 @@ public class DatabaseHelper {
                 preparedStatement.addBatch();
             }
             int[] results = preparedStatement.executeBatch();
-            logger.info("Added: " + results.length + " to Database");
+            logger.info("Added: " + results.length + " records to Database");
         } catch (SQLException e) {
             logger.error("*** COULDN`T ADD VALUE TO DATABASE ***");
             throw new SQLException("Couldn`t add value", e);
