@@ -28,8 +28,17 @@ Next step is to connect to Database and save data from Excel to table in DB
 ### Samples
 
 > * Excel file location:
+
 ![structure.png](structure.png)
+
 > * Script results:
+
 ![program.png](program.png)
+
+> * Excel records:
+
+![excel.png](excel.png)
+
 > * Database records
+
 ![database.png](database.png)
