@@ -46,7 +46,7 @@ public class TablePage {
             for (int c = 1; c <= columns; c++) {
                 String scrappedText = driver.findElement(By.xpath("//div[@id='table']//*[contains(@class,'data-table')]/tbody/*[not(contains(@style,'display'))]"
                                 +"["+r+"]"+"/td"+"["+c+"]"))
-                                .getText();
+                        .getText();
                 dataRow.createCell(c-1).setCellValue(scrappedText);
             }
         }
